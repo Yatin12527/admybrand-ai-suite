@@ -1,103 +1,216 @@
-import Image from "next/image";
+"use client";
+import React, { useState, useEffect } from "react";
+import InteractivePricingCalculator from "./components/calculator";
+import ContactForm from "./components/contact";
+import { FAQSection } from "./components/faqSection";
+import { Footer } from "./components/footer";
+import { HeroSection } from "./components/heroSection";
+import PricingSection from "./components/pricingSection";
+import FeaturesSection from "./components/section";
+import { TestimonialsSection } from "./components/testimonial";
+import TrustedBySection from "./components/ui/trustedby";
+import { HiOutlineCalculator } from "react-icons/hi2";
+import {
+  VscHome,
+  VscArchive,
+  VscAccount,
+  VscSettingsGear,
+  VscFeedback,
+  VscQuestion,
+} from "react-icons/vsc";
 
-export default function Home() {
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkScreenSize = () => setIsMobile(window.innerWidth < 768);
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+  return isMobile;
+};
+
+type DockItem = {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+};
+
+type DockProps = {
+  items: DockItem[];
+  panelHeight?: number;
+  baseItemSize?: number;
+  magnification?: number;
+};
+
+const Dock: React.FC<DockProps> = ({
+  items,
+  panelHeight = 78,
+  baseItemSize = 80,
+  magnification = 20,
+}) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const isMobile = useIsMobile();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div
+      className="flex items-center justify-around md:justify-center w-[95vw] md:w-auto p-3 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl"
+      style={{
+        height: `${panelHeight}px`,
+        background:
+          "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+    >
+      {items.map((item, index) => {
+        let size = baseItemSize;
+        if (!isMobile && hoveredIndex !== null) {
+          const distance = Math.abs(index - hoveredIndex);
+          const scale = Math.max(0.85, 1 - distance * 0.08);
+          size = index === hoveredIndex ? magnification : baseItemSize * scale;
+        }
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        const isHovered = !isMobile && index === hoveredIndex;
+
+        return (
+          <div
+            key={index}
+            className="relative flex flex-col items-center justify-center mx-1 cursor-pointer transition-all duration-300 ease-out group"
+            onMouseEnter={() => !isMobile && setHoveredIndex(index)}
+            onMouseLeave={() => !isMobile && setHoveredIndex(null)}
+            onClick={item.onClick}
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              transform: isHovered ? "translateY(-6px)" : "translateY(0)",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+              <div className="bg-black/80 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-lg">
+                {item.label}
+              </div>
+            </div>
+
+            <div
+              className="flex items-center justify-center w-full h-full rounded-xl transition-all duration-300 shadow-lg"
+              style={{
+                background: isHovered
+                  ? "rgba(255, 255, 255, 0.2)"
+                  : "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+              }}
+            >
+              <div
+                style={{ fontSize: `${Math.min(size * 0.4, 22)}px` }}
+                className="text-white"
+              >
+                {item.icon}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
-}
+};
+
+const LandingPage = () => {
+  const isMobile = useIsMobile();
+
+  const allItems: DockItem[] = [
+    {
+      icon: <VscHome size={18} />,
+      label: "Home",
+      onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+    },
+    {
+      icon: <VscArchive size={18} />,
+      label: "Features",
+      onClick: () =>
+        document
+          .getElementById("features")
+          ?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      icon: <VscAccount size={18} />,
+      label: "Pricing",
+      onClick: () =>
+        document
+          .getElementById("pricing")
+          ?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      icon: <HiOutlineCalculator size={18} />,
+      label: "Calculator",
+      onClick: () =>
+        document
+          .getElementById("calculator")
+          ?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      icon: <VscFeedback size={18} />,
+      label: "Reviews",
+      onClick: () =>
+        document
+          .getElementById("testimonials")
+          ?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      icon: <VscQuestion size={18} />,
+      label: "FAQ",
+      onClick: () =>
+        document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" }),
+    },
+    {
+      icon: <VscSettingsGear size={18} />,
+      label: "Contact",
+      onClick: () =>
+        document
+          .getElementById("contact")
+          ?.scrollIntoView({ behavior: "smooth" }),
+    },
+  ];
+
+  const navItems = isMobile
+    ? allItems.filter(
+        (item) => item.label !== "Calculator" && item.label !== "Reviews"
+      )
+    : allItems;
+
+  return (
+    <div className="min-h-screen">
+      <HeroSection />
+      <TrustedBySection />
+      <div id="features">
+        <FeaturesSection />
+      </div>
+      <div id="pricing">
+        <PricingSection />
+        <div id="calculator">
+          <InteractivePricingCalculator />
+        </div>
+      </div>
+      <div id="testimonials">
+        <TestimonialsSection />
+      </div>
+      <div id="faq">
+        <FAQSection />
+      </div>
+      <div id="contact">
+        <ContactForm />
+      </div>
+      <Footer />
+      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+        <Dock
+          items={navItems}
+          panelHeight={80}
+          baseItemSize={50}
+          magnification={70}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default LandingPage;
