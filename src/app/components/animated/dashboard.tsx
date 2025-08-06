@@ -21,11 +21,9 @@ import {
   Clock,
   Zap,
 } from "lucide-react";
-import Image from "next/image";
-import { ReactNode } from "react";
 
 interface StatCardProps {
-  icon: ReactNode;
+  icon: React.ReactNode;
   value: string | number;
   label: string;
   trend?: string;
@@ -39,6 +37,7 @@ interface ProgressBarProps {
   percentage: number;
   delay?: number;
 }
+
 // Data Constants - Centralized for easier maintenance
 const CHART_DATA = {
   revenue: [
@@ -135,7 +134,7 @@ const AdvancedLineChart = () => {
           strokeDasharray="1000"
           strokeDashoffset="1000"
           style={{
-            animation: "drawLine 1.5s ease-out 0.2s both",
+            animation: "drawLine 1.5s ease-out 1.7s both",
           }}
         />
 
@@ -151,7 +150,7 @@ const AdvancedLineChart = () => {
             strokeWidth="6"
             className="cursor-pointer opacity-0 hover:opacity-100 transition-opacity"
             style={{
-              animation: `fadeIn 0.4s ease-out ${0.6 + index * 0.05}s both`,
+              animation: `fadeIn 0.4s ease-out ${2.1 + index * 0.05}s both`,
             }}
             onMouseEnter={() => setActivePoint(index)}
             onMouseLeave={() => setActivePoint(null)}
@@ -219,7 +218,7 @@ const EnhancedPieChart = () => {
               strokeDashoffset={strokeDashoffset}
               strokeLinecap="round"
               style={{
-                animation: `drawCircle 1s ease-out ${0.3 + index * 0.1}s both`,
+                animation: `drawCircle 1s ease-out ${1.8 + index * 0.1}s both`,
               }}
             />
           );
@@ -246,7 +245,7 @@ const ProfessionalBarChart = () => (
             backgroundColor: item.color,
             maxHeight: "32px",
             height: `${item.value}%`,
-            animationDelay: `${0.3 + index * 0.05}s`,
+            animationDelay: `${1.8 + index * 0.05}s`,
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20" />
@@ -288,7 +287,7 @@ const EngagementMeter = ({ value = 78 }) => {
           strokeDashoffset={circumference}
           style={
             {
-              animation: `drawProgress 1.5s ease-out 0.5s both`,
+              animation: `drawProgress 1.5s ease-out 2.0s both`,
               "--target-offset": strokeDashoffset,
             } as React.CSSProperties
           }
@@ -339,7 +338,13 @@ const StatCard = ({
 );
 
 // Progress bar component for revenue sources
-const ProgressBar = ({ name, value, color, percentage, delay }: ProgressBarProps ) => (
+const ProgressBar = ({
+  name,
+  value,
+  color,
+  percentage,
+  delay,
+}: ProgressBarProps) => (
   <div className="flex items-center justify-between">
     <div className="flex items-center gap-2">
       <div className={`w-3 h-3 bg-${color}-500 rounded-full`}></div>
@@ -398,11 +403,11 @@ const Dashboard = () => {
         }
       `}</style>
 
-      <div className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4 0">
+      <div className="w-full min-h-screen flex items-center justify-center p-2 sm:p-4">
         <div
           className="w-full max-w-7xl bg-black/40 backdrop-blur-3xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden min-h-[600px] opacity-0"
           style={{
-            animation: "scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
+            animation: "scaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both",
           }}
         >
           {/* Header - Brand and controls */}
@@ -417,13 +422,9 @@ const Dashboard = () => {
 
               {/* Brand identity */}
               <div className="flex items-center gap-2 sm:gap-3">
-                <Image
-                  src="/favicon.png"
-                  width={32}
-                  height={32}
-                  alt="icon"
-                  className="rounded-lg"
-                />
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <BarChart2 className="w-4 h-4 text-white" />
+                </div>
                 <div>
                   <span className="text-white font-bold text-sm sm:text-base">
                     ADmyBRAND
@@ -508,7 +509,7 @@ const Dashboard = () => {
                   </div>
                   <div className="space-y-3">
                     {REVENUE_SOURCES.map((source, i) => (
-                      <ProgressBar key={i} {...source} delay={0.8 + i * 0.2} />
+                      <ProgressBar key={i} {...source} delay={2.3 + i * 0.2} />
                     ))}
                   </div>
 
@@ -651,42 +652,42 @@ const Dashboard = () => {
                 value="$127K"
                 label="Revenue"
                 trend="23%"
-                delay={0.8}
+                delay={2.3}
               />
               <StatCard
                 icon={<Users className="w-4 h-4" />}
                 value="45.2K"
                 label="Reach"
                 trend="18%"
-                delay={0.9}
+                delay={2.4}
               />
               <StatCard
                 icon={<Eye className="w-4 h-4" />}
                 value="892K"
                 label="Views"
                 trend="31%"
-                delay={1.0}
+                delay={2.5}
               />
               <StatCard
                 icon={<Heart className="w-4 h-4" />}
                 value="12.4K"
                 label="Likes"
                 trend="42%"
-                delay={1.1}
+                delay={2.6}
               />
               <StatCard
                 icon={<Share2 className="w-4 h-4" />}
                 value="3.2K"
                 label="Shares"
                 trend="67%"
-                delay={1.2}
+                delay={2.7}
               />
               <StatCard
                 icon={<Target className="w-4 h-4" />}
                 value="8.9%"
                 label="CTR"
                 trend="15%"
-                delay={1.3}
+                delay={2.8}
               />
             </div>
 
@@ -694,7 +695,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div
                 className="bg-blue-500/10 backdrop-blur-sm p-4 rounded-xl border border-blue-500/20 opacity-0 transform translate-y-5"
-                style={{ animation: "slideUp 0.5s ease-out 1.4s both" }}
+                style={{ animation: "slideUp 0.5s ease-out 2.9s both" }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -717,7 +718,7 @@ const Dashboard = () => {
 
               <div
                 className="bg-green-500/10 backdrop-blur-sm p-4 rounded-xl border border-green-500/20 opacity-0 transform translate-y-5"
-                style={{ animation: "slideUp 0.5s ease-out 1.5s both" }}
+                style={{ animation: "slideUp 0.5s ease-out 3.0s both" }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
@@ -735,7 +736,7 @@ const Dashboard = () => {
 
               <div
                 className="bg-yellow-500/10 backdrop-blur-sm p-4 rounded-xl border border-yellow-500/20 opacity-0 transform translate-y-5"
-                style={{ animation: "slideUp 0.5s ease-out 1.6s both" }}
+                style={{ animation: "slideUp 0.5s ease-out 3.1s both" }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
@@ -755,7 +756,7 @@ const Dashboard = () => {
 
               <div
                 className="bg-purple-500/10 backdrop-blur-sm p-4 rounded-xl border border-purple-500/20 opacity-0 transform translate-y-5"
-                style={{ animation: "slideUp 0.5s ease-out 1.7s both" }}
+                style={{ animation: "slideUp 0.5s ease-out 3.2s both" }}
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
