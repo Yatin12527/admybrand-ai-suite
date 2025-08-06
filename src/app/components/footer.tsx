@@ -148,7 +148,7 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="hidden border-t border-slate-800 pt-8 sm:flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center mb-4 md:mb-0">
             <p className="text-slate-500 text-sm flex items-center">
               © 2025 ADmyBRAND. Made with
@@ -157,7 +157,7 @@ export const Footer = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4 text-xs">
+          <div className="hidden sm:flex flex-wrap gap-4 text-xs">
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
               (item) => (
                 <a
