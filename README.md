@@ -4,47 +4,48 @@ This repository contains the source code for a stunning and modern landing page 
 
 **Live Demo:** [**https://admybrand-ai-suite-pi.vercel.app/**](https://admybrand-ai-suite-pi.vercel.app/)
 
-\<br/\>
+\
 
-\<br/\>
+\*\*
+\*\*
 
------
+---
 
 ## ✨ Feature Overview
 
 This landing page is not just a static design; it's a fully interactive experience built with modern web technologies to feel premium and engaging.
 
-  * **Modern 2025 UI/UX Trends:** Implements **glassmorphism**, beautiful gradient texts, and a clean, dark-mode aesthetic for a professional feel.
-  * **Advanced Animations:** Utilizes **Framer Motion** for smooth, performant animations, including:
-      * On-scroll reveal animations for all sections.
-      * Subtle hover effects on interactive elements.
-      * A dynamic background with flowing particles for a lively feel.
-  * **Fully Responsive Design:** A mobile-first approach ensures a flawless and intuitive experience across all devices, from mobile phones to widescreen desktops.
-  * **Interactive Pricing Calculator:** A functional calculator that allows users to estimate costs based on their needs, fulfilling a bonus requirement of the project.
-  * **Custom CSS Graphics:** The impressive dashboard graphic in the hero section is built purely with CSS, showcasing advanced styling capabilities.
-  * **Complete Landing Page Sections:** Includes all essential SaaS landing page components:
-      * **Hero Section:** A compelling headline with shiny text effects and a clear call-to-action.
-      * **Features Section:** Detailed breakdown of the AI suite's capabilities.
-      * **Pricing Tiers:** Clearly defined pricing cards.
-      * **Testimonials:** A carousel for customer reviews.
-      * **FAQ:** An accordion-style FAQ section for common questions.
-      * **Contact Form:** A functional contact form with client-side validation and a mocked API call promise.
-  * **Smooth Navigation:** A floating dock navigation bar provides easy, smooth-scrolling access to all sections of the page.
+- **Modern 2025 UI/UX Trends:** Implements **glassmorphism**, beautiful gradient texts, and a clean, dark-mode aesthetic for a professional feel.
+- **Advanced Animations:** Utilizes **Framer Motion** for smooth, performant animations, including:
+  - On-scroll reveal animations for all sections.
+  - Subtle hover effects on interactive elements.
+  - A dynamic background with flowing particles for a lively feel.
+- **Fully Responsive Design:** A mobile-first approach ensures a flawless and intuitive experience across all devices, from mobile phones to widescreen desktops.
+- **Interactive Pricing Calculator:** A functional calculator that allows users to estimate costs based on their needs, fulfilling a bonus requirement of the project.
+- **Custom CSS Graphics:** The impressive dashboard graphic in the hero section is built purely with CSS, showcasing advanced styling capabilities.
+- **Complete Landing Page Sections:** Includes all essential SaaS landing page components:
+  - **Hero Section:** A compelling headline with shiny text effects and a clear call-to-action.
+  - **Features Section:** Detailed breakdown of the AI suite's capabilities.
+  - **Pricing Tiers:** Clearly defined pricing cards.
+  - **Testimonials:** A carousel for customer reviews.
+  - **FAQ:** An accordion-style FAQ section for common questions.
+  - **Contact Form:** A functional contact form with client-side validation and a mocked API call promise.
+- **Smooth Navigation:** A floating dock navigation bar provides easy, smooth-scrolling access to all sections of the page.
 
------
+---
 
 ## 🛠️ Tech Stack
 
 This project leverages a modern, type-safe, and performant technology stack.
 
-  * **Framework:** **Next.js 14** (App Router)
-  * **Language:** **TypeScript**
-  * **Styling:** **Tailwind CSS**
-  * **Animations:** **Framer Motion**
-  * **UI Components:** A custom-built library of reusable components in `src/app/components/ui`.
-  * **Deployment:** **Vercel**
+- **Framework:** **Next.js 14** (App Router)
+- **Language:** **TypeScript**
+- **Styling:** **Tailwind CSS**
+- **Animations:** **Framer Motion**
+- **UI Components:** A custom-built library of reusable components in `src/app/components/ui`.
+- **Deployment:** **Vercel**
 
------
+---
 
 ## 📂 Project Structure
 
@@ -54,7 +55,7 @@ The codebase is organized logically, with a focus on reusability and maintainabi
 /src
 └── /app
     ├── /components
-    │   ├── /animated  // folder for subcomponents 
+    │   ├── /animated  // Animation wrapper components
     │   └── /ui        // Reusable UI components (Hero, Pricing, FAQ, etc.)
     ├── globals.css    // Global styles
     ├── layout.tsx     // Root layout
@@ -63,7 +64,7 @@ The codebase is organized logically, with a focus on reusability and maintainabi
 
 The core logic is centered in `page.tsx`, which composes the page by assembling the various UI components from the `/components/ui` directory. This structure makes it easy to manage and update individual sections of the landing page.
 
------
+---
 
 ## 🚀 Getting Started
 
@@ -102,14 +103,22 @@ npm run dev
 
 Open [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000) with your browser to see the result. The page will auto-update as you edit the code.
 
------
+---
+
+## 🤖 AI Usage Report
+
+As required by the project brief, a detailed report outlining the use of AI tools during development is available.
+
+➡️ **[View the Full AI Usage Report](https://www.google.com/search?q=./AI-USAGE-REPORT.md)**
+
+---
 
 ## 👤 Author
 
-  * **Yatinder**
-  * **Email:** [chhoker.yatinder123@gmail.com](mailto:chhoker.yatinder123@gmail.com)
+- **Yatinder**
+- **Email:** [chhoker.yatinder123@gmail.com](mailto:chhoker.yatinder123@gmail.com)
 
------
+---
 
 ## 📄 License
 
