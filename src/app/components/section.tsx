@@ -3,9 +3,6 @@
 import type React from "react";
 import { useRef, useMemo } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Sparkles } from "lucide-react";
-
-// Assuming these components exist in the specified paths
 import AnalyticsDashboard from "./animated/analytic";
 import TargetingSystem from "./animated/targetSystem";
 import OptimizationEngine from "./animated/optEngine";
@@ -64,7 +61,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         transition: { duration: 0.3 },
       }}
     >
-      <div className="relative h-full p-8 rounded-2xl bg-slate-900/70 border border-slate-700/50 backdrop-blur-xl hover:border-slate-600/60 transition-all duration-500 hover:bg-slate-900/90 overflow-hidden group">
+      <div className="relative h-full p-8 rounded-2xl bg-white/[0.05] border border-slate-700/50 backdrop-blur-xl hover:border-slate-600/60 transition-all duration-500 hover:bg-slate-900/90 overflow-hidden group">
         <div
           className={`absolute inset-0 bg-gradient-to-r ${gradients[gradientIndex]} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
         />
@@ -222,7 +219,10 @@ export default function FeaturesSection() {
           transition={{ duration: 1, delay: 0.5 }}
           className="text-center mt-20 flex justify-center"
         >
-          <motion.button className="group  px-8 py-4 bg-white/10 backdrop-blur-md border border-white/10 text-white/80 rounded-full font-semibold transition-transform duration-200 flex items-center justify-center hover:bg-white/10 hover:text-white hover:scale-105 active:scale-95">
+          <motion.button
+            className="group px-8 py-4 bg-white/10 backdrop-blur-md border border-white/10 text-white/80 rounded-full font-semibold transition-transform duration-200 flex items-center justify-center hover:bg-white/10 hover:text-white hover:scale-105 active:scale-95 cursor-pointer"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
             See Live Results
           </motion.button>
         </motion.div>

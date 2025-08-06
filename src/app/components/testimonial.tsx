@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { motion, useInView, Variants } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 import Particles from "./ui/particles";
+import Image from "next/image";
 
 export const TestimonialsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -203,15 +204,17 @@ export const TestimonialsSection = () => {
 
                   {/* Testimonial Content */}
                   <p className="text-gray-100 mb-8 leading-relaxed text-base font-light">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </p>
 
                   {/* Author Info */}
                   <div className="flex items-center">
                     <div className="relative">
-                      <img
+                      <Image
                         src={testimonial.image}
                         alt={testimonial.name}
+                        width={48}
+                        height={48}
                         className="w-12 h-12 rounded-2xl mr-4 border border-white/20 group-hover:border-white/30 transition-colors duration-300"
                       />
                       <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
@@ -242,9 +245,14 @@ export const TestimonialsSection = () => {
             Join thousands of satisfied customers transforming their marketing
           </p>
           <motion.button
-            className="bg-gradient-to-r from-blue-600/90 to-indigo-600/90 hover:from-blue-500 hover:to-indigo-500 backdrop-blur-xl text-white font-semibold px-10 py-4 rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 border border-white/10 hover:border-white/20"
+            className="bg-gradient-to-r cursor-pointer from-blue-600/90 to-indigo-600/90 hover:from-blue-500 hover:to-indigo-500 backdrop-blur-xl text-white font-semibold px-10 py-4 rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 border border-white/10 hover:border-white/20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              document
+                .getElementById("pricing")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
             Start Your Success Story
           </motion.button>

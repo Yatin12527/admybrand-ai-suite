@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-// Nunito as the default font - only essential weights
+// Nunito
 const nunito = localFont({
   src: [
     {
@@ -34,7 +34,7 @@ const nunito = localFont({
   variable: "--font-nunito",
 });
 
-// Gilroy as secondary font - only essential weights
+// Gilroy
 const gilroy = localFont({
   src: [
     {
@@ -66,10 +66,10 @@ const gilroy = localFont({
   variable: "--font-gilroy",
 });
 
-// Gloock font - add variable property
+// Gloock font
 const gloock = localFont({
   src: [{ path: "../../public/fonts/Gloock-Regular.ttf" }],
-  variable: "--font-gloock", // This was missing!
+  variable: "--font-gloock",
 });
 
 export const metadata: Metadata = {
@@ -80,7 +80,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children,
 }: {
@@ -90,7 +89,6 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${nunito.variable} ${gilroy.variable} ${gloock.variable} font-sans antialiased`}
-      
       >
         {children}
       </body>

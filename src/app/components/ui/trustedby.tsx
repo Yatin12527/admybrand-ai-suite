@@ -18,6 +18,7 @@ import {
   SiTesla,
 } from "react-icons/si";
 import { TfiMicrosoftAlt } from "react-icons/tfi";
+import { IconType } from "react-icons"; 
 
 // Extended company logos data with consistent fonts
 const topRowLogos = [
@@ -53,7 +54,7 @@ const LogoItem = ({
   font,
 }: {
   name: string;
-  logo: any;
+  logo: IconType;
   font: string;
 }) => (
   <div className="flex-shrink-0 mx-8 group">

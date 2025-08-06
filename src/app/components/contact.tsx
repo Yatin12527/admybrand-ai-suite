@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import Particles from "./ui/particles";
 
-
 interface FormData {
   name: string;
   email: string;
@@ -34,10 +33,12 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [focusedField, setFocusedField] = useState<string>("");
+  // Track visibility to trigger entrance animations based on scroll
   const [isVisible, setIsVisible] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Intersection Observer for scroll-triggered animations - better UX than immediate visibility
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -45,7 +46,7 @@ export default function ContactForm() {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 } // Trigger when 10% visible for smooth timing
     );
 
     if (sectionRef.current) {
@@ -76,6 +77,7 @@ export default function ContactForm() {
   const handleInputChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
+    // Clear error immediately when user starts typing - reduces friction
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -98,13 +100,14 @@ export default function ContactForm() {
 
     setIsSubmitting(true);
 
-    // Simulate API call
+    // Simulate API call with delay for better perceived performance
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     setIsSubmitting(false);
     setIsSubmitted(true);
   };
 
+  // Config array keeps form field definitions clean and maintainable
   const formFields = [
     {
       name: "name",
@@ -134,7 +137,7 @@ export default function ContactForm() {
       ref={sectionRef}
       className="relative min-h-screen w-full overflow-hidden bg-black py-20 px-4"
     >
-      {/* Single particles background that covers everything */}
+      {/* Background particles positioned absolutely to avoid layout interference */}
       <div className="absolute inset-0 z-0">
         <Particles
           particleColors={["#ffffff", "#ffffff"]}
@@ -149,10 +152,10 @@ export default function ContactForm() {
         />
       </div>
 
-      {/* Gradient overlays */}
+      {/* Subtle gradient overlay enhances depth perception */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900/10 via-transparent to-gray-900/5 z-10" />
 
-      {/* Success State */}
+      {/* Success State - completely replaces form to avoid confusion */}
       {isSubmitted && (
         <div className="absolute inset-0 z-20 flex items-center justify-center px-4">
           <div className="text-center max-w-2xl mx-auto transform transition-all duration-1000 scale-100 opacity-100">
@@ -187,10 +190,10 @@ export default function ContactForm() {
         </div>
       )}
 
-      {/* Main Form Content */}
+      {/* Main Form - conditionally rendered to improve performance */}
       {!isSubmitted && (
         <div className="relative z-20 container mx-auto px-6 max-w-3xl">
-          {/* Header */}
+          {/* Staggered animations create a more polished entrance */}
           <div
             className={`text-center mb-16 transform transition-all duration-1000 ${
               isVisible
@@ -199,13 +202,13 @@ export default function ContactForm() {
             }`}
           >
             <h2 className="text-4xl font-gilroy md:text-6xl font-bold text-slate-200 mb-6 leading-tight">
-              Let's <span className="font-gloock italic">Connect</span>
+              Let&apos;s <span className="font-gloock italic">Connect</span>
               <br />
             </h2>
 
             <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
               Ready to transform your marketing? Tell us about your project and
-              we'll craft a solution just for you.
+              we&apos;ll craft a solution just for you.
             </p>
           </div>
 
@@ -217,7 +220,6 @@ export default function ContactForm() {
             }`}
           >
             <div className="space-y-6">
-              {/* Form Fields */}
               <div className="space-y-6">
                 {formFields.map((field, index) => (
                   <div
@@ -227,6 +229,7 @@ export default function ContactForm() {
                         ? "translate-y-0 opacity-100"
                         : "translate-y-5 opacity-0"
                     }`}
+                    // Cascading delay creates smooth sequential animation
                     style={{ transitionDelay: `${600 + index * 100}ms` }}
                   >
                     <label className="block text-slate-300 font-medium">
@@ -241,6 +244,7 @@ export default function ContactForm() {
                         }
                         onFocus={() => setFocusedField(field.name)}
                         onBlur={() => setFocusedField("")}
+                        // Dynamic styling based on state reduces jarring visual changes
                         className={`w-full bg-white/[0.05] border rounded-2xl px-4 py-4 pl-12 text-white placeholder-slate-400 focus:outline-none transition-all duration-300 ${
                           errors[field.name]
                             ? "border-red-400 focus:border-red-300"
@@ -261,7 +265,7 @@ export default function ContactForm() {
                   </div>
                 ))}
 
-                {/* Message Field */}
+                {/* Message field separated because it needs different styling/behavior */}
                 <div
                   className={`space-y-2 transform transition-all duration-700 ${
                     isVisible
@@ -301,7 +305,6 @@ export default function ContactForm() {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <div
                 className={`text-center pt-4 transform transition-all duration-700 ${
                   isVisible
@@ -314,7 +317,8 @@ export default function ContactForm() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className={`bg-white text-black font-semibold px-12 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center mx-auto transform ${
+                  // Conditional styling prevents layout shift during state changes
+                  className={`bg-white cursor-pointer text-black font-semibold px-12 py-4 rounded-2xl transition-all duration-300 flex items-center justify-center mx-auto transform ${
                     isSubmitting
                       ? "opacity-70 cursor-not-allowed"
                       : "hover:bg-slate-100 hover:shadow-2xl hover:scale-105 active:scale-95"
@@ -326,7 +330,7 @@ export default function ContactForm() {
                       Sending Message...
                     </div>
                   ) : (
-                    <div className="flex items-center">
+                    <div className="flex items-center ">
                       Send Message
                       <Send className="w-5 h-5 ml-2" />
                     </div>
@@ -334,7 +338,7 @@ export default function ContactForm() {
                 </button>
 
                 <p className="text-slate-400 text-sm mt-4">
-                  We'll get back to you within 24 hours
+                  We&apos;ll get back to you within 24 hours
                 </p>
               </div>
             </div>

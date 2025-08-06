@@ -1,13 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion, useInView, Variants } from "framer-motion";
-import {
-  Check,
-  Zap,
-  Users,
-  BarChart3,
-  Shield,
-  ArrowRight,
-} from "lucide-react";
+import { Check, Users, BarChart3, Shield, ArrowRight } from "lucide-react";
 import Particles from "./ui/particles";
 
 export default function InteractivePricingCalculator() {
@@ -68,39 +61,49 @@ export default function InteractivePricingCalculator() {
     },
   };
 
-  const addOnPrices = {
-    analytics: 19,
-    priority: 39,
-    training: 99,
-  };
+  const addOnOptions = [
+    {
+      key: "analytics",
+      name: "Advanced Analytics Dashboard",
+      price: 19,
+      icon: BarChart3,
+    },
+    {
+      key: "priority",
+      name: "Priority Support & Training",
+      price: 39,
+      icon: Shield,
+    },
+    {
+      key: "training",
+      name: "Custom Training & Onboarding",
+      price: 99,
+      icon: Users,
+    },
+  ];
 
   const calculatePrice = () => {
     const plan = plans[selectedPlan as keyof typeof plans];
     let basePrice = plan.basePrice;
 
-    // Apply yearly discount
     if (billing === "yearly") {
-      basePrice = basePrice * 0.8; // 20% discount
+      basePrice = basePrice * 0.8;
     }
 
-    // Calculate team overage
     let teamOverage = 0;
     if (selectedPlan !== "enterprise" && teamSize > plan.teamLimit) {
       teamOverage = (teamSize - plan.teamLimit) * 15;
     }
 
-    // Calculate campaign overage
     let campaignOverage = 0;
     if (selectedPlan === "starter" && campaigns > plan.campaignLimit) {
       campaignOverage = Math.ceil((campaigns - plan.campaignLimit) / 10) * 10;
     }
 
-    // Add-ons
     const addOnTotal = Object.entries(addOns).reduce(
       (total, [key, enabled]) => {
-        return (
-          total + (enabled ? addOnPrices[key as keyof typeof addOnPrices] : 0)
-        );
+        const addon = addOnOptions.find((a) => a.key === key);
+        return total + (enabled && addon ? addon.price : 0);
       },
       0
     );
@@ -128,10 +131,7 @@ export default function InteractivePricingCalculator() {
   };
 
   const itemVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-    },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
@@ -143,6 +143,85 @@ export default function InteractivePricingCalculator() {
       },
     },
   };
+
+  // Reusable card wrapper component
+  const ConfigCard = ({
+    title,
+    children,
+  }: {
+    title: string;
+    children: React.ReactNode;
+  }) => (
+    <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8">
+      <h3 className="text-xl font-semibold text-white mb-6">{title}</h3>
+      {children}
+    </div>
+  );
+
+  // Reusable slider component
+  const SliderControl = ({
+    label,
+    value,
+    onChange,
+    min,
+    max,
+  }: {
+    label: string;
+    value: number;
+    onChange: (value: number) => void;
+    min: number;
+    max: number;
+  }) => (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-slate-300">{label}</span>
+        <span className="text-2xl font-bold text-white">{value}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        onChange={(e) => onChange(parseInt(e.target.value))}
+        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider"
+      />
+      <div className="flex justify-between text-slate-400 text-sm">
+        <span>{min}</span>
+        <span>{max}+</span>
+      </div>
+    </div>
+  );
+
+  // Reusable button component
+  const ToggleButton = ({
+    active,
+    onClick,
+    children,
+    badge,
+  }: {
+    active: boolean;
+    onClick: () => void;
+    children: React.ReactNode;
+    badge?: string;
+  }) => (
+    <motion.button
+      onClick={onClick}
+      className={`px-6 py-3 rounded-xl transition-all duration-300 relative ${
+        active
+          ? "bg-white text-black font-semibold"
+          : "bg-white/[0.05] text-slate-300 hover:bg-white/[0.1]"
+      }`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      {children}
+      {badge && (
+        <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+          {badge}
+        </span>
+      )}
+    </motion.button>
+  );
 
   return (
     <section
@@ -167,7 +246,7 @@ export default function InteractivePricingCalculator() {
       {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900/20 via-transparent to-gray-900/10 z-10" />
 
-      <div className="relative z-20 container mx-auto px-6 max-w-7xl ">
+      <div className="relative z-20 container mx-auto px-6 max-w-7xl">
         {/* Header */}
         <motion.div
           className="text-center mb-16"
@@ -177,15 +256,16 @@ export default function InteractivePricingCalculator() {
         >
           <h2 className="text-4xl font-gilroy md:text-6xl font-bold text-slate-200 mb-6 leading-tight">
             Pricing <span className="font-gloock italic">Calculator</span>
-            <br />
           </h2>
-
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Find Your Perfect Plan<br></br> Customize your ADmyBRAND experience with our
-            interactive pricing calculator
+            Find Your Perfect Plan
+            <br />
+            Customize your ADmyBRAND experience with our interactive pricing
+            calculator
           </p>
         </motion.div>
-        <div className="border-none sm:border sm:bg-white/[0.05] flex justify-center items-center rounded-4xl sm:p-10 border-white/[0.2]">
+
+        <div className=" sm:border sm:bg-white/[0.05] flex justify-center items-center rounded-4xl sm:p-10 sm:border-white/[0.4]">
           <motion.div
             className="grid lg:grid-cols-3 gap-8"
             variants={containerVariants}
@@ -198,11 +278,7 @@ export default function InteractivePricingCalculator() {
               variants={itemVariants}
             >
               {/* Plan Selection */}
-              <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8">
-                <h3 className="text-2xl font-gilroy font-semibold text-white mb-6">
-                  Choose Your Plan
-                </h3>
-
+              <ConfigCard title="Choose Your Plan">
                 <div className="grid md:grid-cols-3 gap-4">
                   {Object.entries(plans).map(([key, plan]) => (
                     <motion.button
@@ -229,139 +305,56 @@ export default function InteractivePricingCalculator() {
                     </motion.button>
                   ))}
                 </div>
-              </div>
+              </ConfigCard>
 
-              {/* Billing Toggle */}
-              <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8">
-                <h3 className="text-xl font-semibold text-white mb-6">
-                  Billing Cycle
-                </h3>
-
-                <div className="flex items-center space-x-4">
-                  <motion.button
-                    onClick={() => setBilling("monthly")}
-                    className={`px-6 py-3 rounded-xl transition-all duration-300 ${
-                      billing === "monthly"
-                        ? "bg-white text-black font-semibold"
-                        : "bg-white/[0.05] text-slate-300 hover:bg-white/[0.1]"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Monthly
-                  </motion.button>
-
-                  <motion.button
-                    onClick={() => setBilling("yearly")}
-                    className={`px-6 py-3 rounded-xl transition-all duration-300 relative ${
-                      billing === "yearly"
-                        ? "bg-white text-black font-semibold"
-                        : "bg-white/[0.05] text-slate-300 hover:bg-white/[0.1]"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Yearly
-                    <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                      20% OFF
-                    </span>
-                  </motion.button>
-                </div>
-              </div>
-
-              {/* Team Size */}
-              <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8">
-                <h3 className="text-xl font-semibold text-white mb-6">
-                  Team Size
-                </h3>
-
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-slate-300">
-                      Number of team members
-                    </span>
-                    <span className="text-2xl font-bold text-white">
-                      {teamSize}
-                    </span>
+              {/* Billing Toggle & Team Size Row */}
+              <div className="grid md:grid-cols-2 gap-8">
+                <ConfigCard title="Billing Cycle">
+                  <div className="flex items-center space-x-4">
+                    <ToggleButton
+                      active={billing === "monthly"}
+                      onClick={() => setBilling("monthly")}
+                    >
+                      Monthly
+                    </ToggleButton>
+                    <ToggleButton
+                      active={billing === "yearly"}
+                      onClick={() => setBilling("yearly")}
+                      badge="20% OFF"
+                    >
+                      Yearly
+                    </ToggleButton>
                   </div>
+                </ConfigCard>
 
-                  <input
-                    type="range"
-                    min="1"
-                    max="50"
+                <ConfigCard title="Team Size">
+                  <SliderControl
+                    label="Number of team members"
                     value={teamSize}
-                    onChange={(e) => setTeamSize(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider"
+                    onChange={setTeamSize}
+                    min={1}
+                    max={50}
                   />
-
-                  <div className="flex justify-between text-slate-400 text-sm">
-                    <span>1</span>
-                    <span>50+</span>
-                  </div>
-                </div>
+                </ConfigCard>
               </div>
 
-              {/* Campaigns */}
+              {/* Campaigns - only for starter */}
               {selectedPlan === "starter" && (
-                <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8">
-                  <h3 className="text-xl font-semibold text-white mb-6">
-                    Monthly Campaigns
-                  </h3>
-
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-300">
-                        Campaigns per month
-                      </span>
-                      <span className="text-2xl font-bold text-white">
-                        {campaigns}
-                      </span>
-                    </div>
-
-                    <input
-                      type="range"
-                      min="1"
-                      max="200"
-                      value={campaigns}
-                      onChange={(e) => setCampaigns(parseInt(e.target.value))}
-                      className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider"
-                    />
-
-                    <div className="flex justify-between text-slate-400 text-sm">
-                      <span>1</span>
-                      <span>200+</span>
-                    </div>
-                  </div>
-                </div>
+                <ConfigCard title="Monthly Campaigns">
+                  <SliderControl
+                    label="Campaigns per month"
+                    value={campaigns}
+                    onChange={setCampaigns}
+                    min={1}
+                    max={200}
+                  />
+                </ConfigCard>
               )}
 
               {/* Add-ons */}
-              <div className="bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-8">
-                <h3 className="text-xl font-semibold text-white mb-6">
-                  Add-ons
-                </h3>
-
+              <ConfigCard title="Add-ons">
                 <div className="space-y-4">
-                  {[
-                    {
-                      key: "analytics",
-                      name: "Advanced Analytics Dashboard",
-                      price: 19,
-                      icon: BarChart3,
-                    },
-                    {
-                      key: "priority",
-                      name: "Priority Support & Training",
-                      price: 39,
-                      icon: Shield,
-                    },
-                    {
-                      key: "training",
-                      name: "Custom Training & Onboarding",
-                      price: 99,
-                      icon: Users,
-                    },
-                  ].map((addon) => (
+                  {addOnOptions.map((addon) => (
                     <motion.label
                       key={addon.key}
                       className="flex items-center p-4 rounded-xl border border-white/[0.08] hover:border-white/[0.15] transition-all duration-300 cursor-pointer"
@@ -404,7 +397,7 @@ export default function InteractivePricingCalculator() {
                     </motion.label>
                   ))}
                 </div>
-              </div>
+              </ConfigCard>
             </motion.div>
 
             {/* Pricing Summary */}
@@ -501,28 +494,6 @@ export default function InteractivePricingCalculator() {
           </motion.div>
         </div>
       </div>
-
-      <style jsx>{`
-        .slider::-webkit-slider-thumb {
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: white;
-          cursor: pointer;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .slider::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: white;
-          cursor: pointer;
-          border: none;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-      `}</style>
     </section>
   );
 }

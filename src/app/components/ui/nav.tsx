@@ -94,7 +94,10 @@ function DockItem({
     >
       {Children.map(children, (child) => {
         if (React.isValidElement(child) && typeof child.type !== "string") {
-          return cloneElement(child as React.ReactElement<any>, { isHovered });
+          return cloneElement(
+            child as React.ReactElement<{ isHovered: boolean }>,
+            { isHovered: !!isHovered.get() } 
+          );
         }
         return child;
       })}

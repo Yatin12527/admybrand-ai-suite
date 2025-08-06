@@ -22,7 +22,7 @@ export const FAQSection = () => {
     {
       question: "What kind of analytics and insights do you provide?",
       answer:
-        "We provide comprehensive analytics including real-time engagement rates, conversion tracking, audience insights, performance predictions, and actionable recommendations for optimization. Our AI-powered analytics dashboard gives you deep insights into what's working and how to improve your campaigns for maximum ROI.",
+        "We provide comprehensive analytics including real-time engagement rates, conversion tracking, audience insights, performance predictions, and actionable recommendations for optimization. Our AI-powered analytics dashboard gives you deep insights into what&apos;s working and how to improve your campaigns for maximum ROI.",
     },
     {
       question: "Is there a free trial available?",
@@ -211,20 +211,18 @@ export const FAQSection = () => {
           transition={{ delay: 1, duration: 0.8 }}
         >
           <p className="text-gray-400 text-lg mb-8">
-            Still have questions? We're here to help
+            Still have questions? We&apos;re here to help
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <motion.button
-              className="bg-gradient-to-r from-blue-600/90 to-indigo-600/90 hover:from-blue-500 hover:to-indigo-500 backdrop-blur-xl text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 shadow-2xl hover:shadow-blue-500/25 border border-white/10 hover:border-white/20"
+              className="bg-white/[0.05] backdrop-blur-xl text-slate-200 hover:text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 border border-white/[0.12] hover:border-white/[0.2] hover:bg-white/[0.08] cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-            >
-              Start Free Trial
-            </motion.button>
-            <motion.button
-              className="bg-white/[0.05] backdrop-blur-xl text-slate-200 hover:text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-300 border border-white/[0.12] hover:border-white/[0.2] hover:bg-white/[0.08]"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              onClick={() =>
+                document
+                  .getElementById("contact")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
             >
               Contact Support
             </motion.button>
