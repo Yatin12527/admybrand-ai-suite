@@ -74,7 +74,7 @@ The codebase is organized logically, with a focus on reusability and maintainabi
 /src
 └── /app
     ├── /components
-    │   ├── /animated   // Animation wrapper components
+    │   ├── /animated   // subcomponents folder
     │   └── /ui         // Reusable UI components (Hero, Pricing, FAQ, etc.)
     ├── globals.css     // Global styles
     ├── layout.tsx      // Root layout
