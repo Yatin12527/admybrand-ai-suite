@@ -1,7 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, useInView, Variants } from "framer-motion";
-import { Check, Users, BarChart3, Shield, ArrowRight } from "lucide-react";
+import {
+  Check,
+  Users,
+  BarChart3,
+  Shield,
+  ArrowRight,
+  Minus,
+  Plus,
+} from "lucide-react";
 import Particles from "./ui/particles";
+import ElasticSlider from "./ui/slider";
 
 export default function InteractivePricingCalculator() {
   const [selectedPlan, setSelectedPlan] = useState("pro");
@@ -158,40 +167,102 @@ export default function InteractivePricingCalculator() {
     </div>
   );
 
-  // Reusable slider component
-  const SliderControl = ({
+  const ElasticSliderControl = ({
     label,
     value,
     onChange,
     min,
     max,
+    stepSize = 1,
   }: {
     label: string;
     value: number;
     onChange: (value: number) => void;
     min: number;
     max: number;
-  }) => (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-slate-300">{label}</span>
-        <span className="text-2xl font-bold text-white">{value}</span>
-      </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        value={value}
-        onChange={(e) => onChange(parseInt(e.target.value))}
-        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer slider"
-      />
-      <div className="flex justify-between text-slate-400 text-sm">
-        <span>{min}</span>
-        <span>{max}+</span>
-      </div>
-    </div>
-  );
+    stepSize?: number;
+  }) => {
+    const sliderRef = useRef<HTMLDivElement>(null);
+    const [currentValue, setCurrentValue] = useState(value);
+    const [isDragging, setIsDragging] = useState(false);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    useEffect(() => {
+      const sliderElement = sliderRef.current;
+      if (!sliderElement) return;
+
+      const handlePointerDown = () => setIsDragging(true);
+      const handlePointerUp = () => setIsDragging(false);
+
+      sliderElement.addEventListener("pointerdown", handlePointerDown);
+      document.addEventListener("pointerup", handlePointerUp);
+
+      return () => {
+        sliderElement.removeEventListener("pointerdown", handlePointerDown);
+        document.removeEventListener("pointerup", handlePointerUp);
+      };
+    }, []);
+
+    useEffect(() => {
+      const interval = setInterval(() => {
+        if (sliderRef.current) {
+          const valueElement = sliderRef.current.querySelector("p");
+          if (valueElement) {
+            const displayedValue = parseInt(valueElement.textContent || "0");
+            if (!isNaN(displayedValue)) {
+              setCurrentValue(displayedValue);
+
+              // Only call onChange when not dragging or after a delay when dragging stops
+              if (!isDragging) {
+                onChange(displayedValue);
+              } else {
+                // Clear previous timeout
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current);
+                }
+                // Set timeout to update after dragging stops
+                timeoutRef.current = setTimeout(() => {
+                  onChange(displayedValue);
+                }, 100);
+              }
+            }
+          }
+        }
+      }, 16);
+
+      return () => {
+        clearInterval(interval);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
+    }, [isDragging, onChange]);
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <span className="text-slate-300">{label}</span>
+          <span className="text-2xl font-bold text-white">{currentValue}</span>
+        </div>
+        <div className="flex justify-center py-4" ref={sliderRef}>
+          <ElasticSlider
+            leftIcon={<Minus className="w-4 h-4 text-slate-400" />}
+            rightIcon={<Plus className="w-4 h-4 text-slate-400" />}
+            startingValue={min}
+            defaultValue={value}
+            maxValue={max}
+            isStepped
+            stepSize={stepSize}
+            className="w-full max-w-sm"
+          />
+        </div>
+        <div className="flex justify-between text-slate-400 text-sm">
+          <span>{min}</span>
+          <span>{max}+</span>
+        </div>
+      </div>
+    );
+  };
   // Reusable button component
   const ToggleButton = ({
     active,
@@ -328,7 +399,7 @@ export default function InteractivePricingCalculator() {
                 </ConfigCard>
 
                 <ConfigCard title="Team Size">
-                  <SliderControl
+                  <ElasticSliderControl
                     label="Number of team members"
                     value={teamSize}
                     onChange={setTeamSize}
@@ -341,12 +412,13 @@ export default function InteractivePricingCalculator() {
               {/* Campaigns - only for starter */}
               {selectedPlan === "starter" && (
                 <ConfigCard title="Monthly Campaigns">
-                  <SliderControl
+                  <ElasticSliderControl
                     label="Campaigns per month"
                     value={campaigns}
                     onChange={setCampaigns}
                     min={1}
                     max={200}
+                    stepSize={5}
                   />
                 </ConfigCard>
               )}
